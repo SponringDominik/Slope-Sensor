@@ -41,7 +41,7 @@ The first component to be selected was the display, because it governs the size 
 We chose a 3-axis accelerometer to measure the tilt angle. The accelerometer is aligned so that its X-axis is parallel to the pole axis. To obtain the tilt angle, the angle between the acceleration vector - which at rest corresponds to the gravity vector - and the X-component of the acceleration vector must be calculated.
 
 <p align="center">
-  <img src="img/angle_scetch.png" />
+  <img src="img/angle-scetch.png" />
 </p>
 
 $$\Theta_x = \arcsin{\Bigg(\frac{|\vec{G}_x|}{|\vec{G}|}\Bigg)}$$
