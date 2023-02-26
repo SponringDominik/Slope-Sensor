@@ -19,10 +19,10 @@
 // Vorwiderstand des Thermistors R3:
 //	0: NTC-Variante
 //	1: PTC-Variante
-#if (1)
-#  define R3_PTC 46000
+#if (0)
+#  define R3_PTC 46250
 #else
-#  define R3_NTC 10500
+#  define R3_NTC 10700
 #endif
 
 
@@ -89,7 +89,7 @@ void go_idle(void){
 
 #ifdef R3_NTC
 /* Lese ADC aus und berechne Temperatur */
-int8_t get_temprature(void){
+int8_t get_temperature(void){
 	// Tabelle des NTC:
 	// Enthält Widerstandswerte zu bekannten Temperaturen von -40°C bis 40°C in 5°C Schritten
 	uint32_t R_NTC_Table[17] = {205200, 154800, 117900, 90690, 70370, 55070, 43440, 34530, 
@@ -123,7 +123,7 @@ int8_t get_temprature(void){
 #endif
 #ifdef R3_PTC
 /* Lese ADC aus und berechne Temperatur */
-int8_t get_temprature(void){
+int8_t get_temperature(void){
 	// Tabelle des PTC:
 	// Enthält Widerstandswerte zu bekannten Temperaturen von -40°C bis 40°C in 5°C Schritten
 	uint16_t R_PTC_Table[17] = {30230, 31234, 32268, 33332, 34427, 35554, 36713, 37905, 39129,
@@ -209,7 +209,7 @@ int main(void){
 		// Winkel messen
 		if(State == 0){
 			// Alle 0.1s wird Wert aktualisiert
-			if(millisecond_10%10 == 1){
+			if(millisecond_10%20 == 1){
 				// Lese Beschleunigungswerte
 				uint8_t* v_accel = read_acceleration();
 				// Erstelle aus den 6 Byte 3 Beschleunigungswerte
@@ -231,11 +231,11 @@ int main(void){
 				// Stromversorgung aktivieren
 				PORTA.OUTSET = TEMP_EN;
 				// Temperaturwert messen
-				int8_t temprature = get_temprature();
+				int8_t temperature = get_temperature();
 				// Stromversorgung deaktivieren
 				PORTA.OUTCLR = TEMP_EN;
 				// Temperaturwert anzeigen
-				lcd_write(temprature);
+				lcd_write(temperature);
 			}
 		}
 		// Ruhemodus aktivieren

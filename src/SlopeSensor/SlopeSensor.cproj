@@ -143,11 +143,6 @@
       <Value>libm</Value>
     </ListValues>
   </avrgcc.linker.libraries.Libraries>
-  <avrgcc.linker.libraries.LibrarySearchPaths>
-    <ListValues>
-      <Value>C:\Users\domi_\HiDrive\Arbeits-Ordner\AVR_Arduino\AVR\Libraries\i2cmaster</Value>
-    </ListValues>
-  </avrgcc.linker.libraries.LibrarySearchPaths>
   <avrgcc.assembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\Atmel\ATtiny_DFP\1.10.348\include\</Value>
