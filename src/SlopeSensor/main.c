@@ -12,7 +12,7 @@
 #include "lcd_util.h"
 
 /*------------------------------------------------------------------------------------*/
-// Zeit, die der Microcontrollers nach Tasterbetätigung wach bleibt in 10ms
+// Zeit, die der Microcontrollers nach TasterbetÃ¤tigung wach bleibt in 10ms
 #define WAKE_TIME 2000
 // Entprell-Zeit des Tasters in 10ms
 #define DEBOUNCE 10
@@ -32,7 +32,7 @@
 uint16_t millisecond_10;
 // Laufzeit, bis der Microcontroller schlafen geht in 10ms
 uint16_t sleep_at_millis = WAKE_TIME;
-// Bis zu dieser Zeit wird eine Zustandsänderung des Tasters ignoriert (Prellen)
+// Bis zu dieser Zeit wird eine ZustandsÃ¤nderung des Tasters ignoriert (Prellen)
 uint16_t wait_time = 0;
 // Zustand des Sensors:
 //		0: Winkel messen
@@ -48,30 +48,30 @@ void go_sleep(void){
 	// Accelerometer ausschalten
 	accel_gosleep();
 	// Display ausschalten
-	PORTA.OUTCLR = LCD_EN;	// Schalte Versorgung für LCD aus
-	// Zustände wieder zurücksetzen
+	PORTA.OUTCLR = LCD_EN;	// Schalte Versorgung fÃ¼r LCD aus
+	// ZustÃ¤nde wieder zurÃ¼cksetzen
 	millisecond_10 = 0;
 	State = 0;
 	sleep_at_millis = WAKE_TIME;
 	wait_time = 0;
-	// Interrupt für Flankenänderung aktivieren
+	// Interrupt fÃ¼r FlankenÃ¤nderung aktivieren
 	PORTB.PIN2CTRL &= ~PORT_ISC_gm;
 	PORTB.PIN2CTRL |=PORT_ISC_BOTHEDGES_gc;	
 	// Schlafen gehen
 	// Sleep-Mode auf Power-Down stellen und Sleep-Enable aktivieren
 	SLPCTRL.CTRLA = SLPCTRL_SEN_bm | SLPCTRL_SMODE_PDOWN_gc;
-	// Assembler Befehl "Sleep" startet ausgewälten Sleep-Modus
-	// Sleep-Enable muss davor gesetzt werden (möglichst direkt davor)
+	// Assembler Befehl "Sleep" startet ausgewÃ¤lten Sleep-Modus
+	// Sleep-Enable muss davor gesetzt werden (mÃ¶glichst direkt davor)
 	asm("SLEEP");
 	
 	
 	// Wake-Up Sequenz
 	// Accelerometer aktivieren
 	accel_wakeup();
-	// Versorgung für LCD einschalten
+	// Versorgung fÃ¼r LCD einschalten
 	PORTA.OUTSET = LCD_EN;
 	lcd_init();
-	// Timer zurücksetzen und starten
+	// Timer zurÃ¼cksetzen und starten
 	TCA0.SINGLE.CNTL = 0;
 	TCA0.SINGLE.CNTH = 0;
 	TCA0.SINGLE.CTRLA |= TCA_SINGLE_ENABLE_bm;
@@ -81,8 +81,8 @@ void go_sleep(void){
 void go_idle(void){
 	// Sleep-Mode auf IDLE stellen und Sleep-Enable aktivieren
 	SLPCTRL.CTRLA = SLPCTRL_SEN_bm | SLPCTRL_SMODE_IDLE_gc;
-	// Assembler Befehl "Sleep" startet ausgewälten Sleep-Modus
-	// Sleep-Enable muss davor gesetzt werden (möglichst direkt davor)
+	// Assembler Befehl "Sleep" startet ausgewÃ¤lten Sleep-Modus
+	// Sleep-Enable muss davor gesetzt werden (mÃ¶glichst direkt davor)
 	asm("SLEEP");
 }
 
@@ -91,7 +91,7 @@ void go_idle(void){
 /* Lese ADC aus und berechne Temperatur */
 int8_t get_temperature(void){
 	// Tabelle des NTC:
-	// Enthält Widerstandswerte zu bekannten Temperaturen von -40°C bis 40°C in 5°C Schritten
+	// EnthÃ¤lt Widerstandswerte zu bekannten Temperaturen von -40Â°C bis 40Â°C in 5Â°C Schritten
 	uint32_t R_NTC_Table[17] = {205200, 154800, 117900, 90690, 70370, 55070, 43440, 34530, 
 								27640, 22270, 18060, 14740, 12110, 10000, 8309, 6941, 5828};
 	// Starte AD Konvertierung
@@ -105,10 +105,10 @@ int8_t get_temperature(void){
 	
 	// Berechne Temperatur mithilfe linearer Interpolation aus der TEMP-Tabelle
 	uint32_t X1, X2;	// Unterer und oberer Widerstandswert
-	// Falls Widerstand größer als größter Wert in Tabelle:
+	// Falls Widerstand grÃ¶ÃŸer als grÃ¶ÃŸter Wert in Tabelle:
 	X1 = R_NTC_Table[0];
 	if(R_NTC > X1) return -88;
-	// Suche ersten Wert, der größer als der gemessene Wert ist
+	// Suche ersten Wert, der grÃ¶ÃŸer als der gemessene Wert ist
 	for(uint8_t i=1; i<17; i++){
 		X2 = R_NTC_Table[i];
 		if(R_NTC > X2){
@@ -125,7 +125,7 @@ int8_t get_temperature(void){
 /* Lese ADC aus und berechne Temperatur */
 int8_t get_temperature(void){
 	// Tabelle des PTC:
-	// Enthält Widerstandswerte zu bekannten Temperaturen von -40°C bis 40°C in 5°C Schritten
+	// EnthÃ¤lt Widerstandswerte zu bekannten Temperaturen von -40Â°C bis 40Â°C in 5Â°C Schritten
 	uint16_t R_PTC_Table[17] = {30230, 31234, 32268, 33332, 34427, 35554, 36713, 37905, 39129,
 								40387, 41679, 43006, 44367, 45763, 47194, 48661, 50164};
 	// Starte AD Konvertierung
@@ -142,7 +142,7 @@ int8_t get_temperature(void){
 	// Falls Widerstand kleiner als kleinster Wert in Tabelle:
 	X1 = R_PTC_Table[0];
 	if(R_PTC < X1) return -88;
-	// Suche ersten Wert, der größer als der gemessene Wert ist 
+	// Suche ersten Wert, der grÃ¶ÃŸer als der gemessene Wert ist 
 	for(uint8_t i=1; i<17; i++){
 		X2 = R_PTC_Table[i];
 		if(R_PTC < X2){
@@ -151,7 +151,7 @@ int8_t get_temperature(void){
 			return lrint(-45 + i*5 + ((float)(R_PTC - X1) / (X2 - X1)) * 5);
 		}
 	}
-	// Falls Widerstand größer als größter Wert in Tabelle:
+	// Falls Widerstand grÃ¶ÃŸer als grÃ¶ÃŸter Wert in Tabelle:
 	return 88;
 }
 #endif
@@ -190,11 +190,11 @@ int main(void){
 		static bool button_old = true;
 		// Neuer Tasterzustand (Taster schaltet auf Gnd)
 		bool button = !(PORTB.IN & BUTTON);
-		// Positive Flanke & außerhalb der Prell-Zeit:
+		// Positive Flanke & auÃŸerhalb der Prell-Zeit:
 		if(button && !button_old && (millisecond_10 > wait_time)){
 			// Wartezeit zum entprellen setzen
 			wait_time = millisecond_10 + DEBOUNCE;
-			// Wachzeit verlängern
+			// Wachzeit verlÃ¤ngern
 			sleep_at_millis = millisecond_10 + WAKE_TIME;
 			// Zustand umschalten
 			if(State == 0){
@@ -208,7 +208,7 @@ int main(void){
 		
 		// Winkel messen
 		if(State == 0){
-			// Alle 0.1s wird Wert aktualisiert
+			// Alle 0.2s wird Wert aktualisiert
 			if(millisecond_10%20 == 1){
 				// Lese Beschleunigungswerte
 				uint8_t* v_accel = read_acceleration();
@@ -217,7 +217,7 @@ int main(void){
 				X = v_accel[0] | (v_accel[1] << 8);
 				Y = v_accel[2] | (v_accel[3] << 8);
 				Z = v_accel[4] | (v_accel[5] << 8);
-				// Berechne Neigungswinkel der Längsachse
+				// Berechne Neigungswinkel der LÃ¤ngsachse
 				uint8_t theta_Y = calc_theta(Y, X, Z);
 				// Neigungswinkel anzeigen
 				lcd_write(theta_Y);
@@ -247,7 +247,7 @@ int main(void){
 
 /* Interrupts -------------------------------------------------------------------------*/
 
-/* Interrupt für Flankenänderung an PINB2 -> Taster gedrückt */
+/* Interrupt fÃ¼r FlankenÃ¤nderung an PINB2 -> Taster gedrÃ¼ckt */
 ISR(PORTB_PORT_vect){
 	uint8_t intflags = PORTB.INTFLAGS;
 	PORTB.INTFLAGS = intflags;
@@ -256,10 +256,10 @@ ISR(PORTB_PORT_vect){
 	// Sleep disable
 	SLPCTRL.CTRLA = 0;
 }
-/* Interrupt für Timer-Overflow -> 1ms vergangen */
+/* Interrupt fÃ¼r Timer-Overflow -> 1ms vergangen */
 ISR(TCA0_OVF_vect){
 	uint8_t intflags = TCA0.SINGLE.INTFLAGS;
 	TCA0.SINGLE.INTFLAGS = intflags;
-	// Zeit um 1ms erhöhen
+	// Zeit um 1ms erhÃ¶hen
 	millisecond_10 += 1;
 }
